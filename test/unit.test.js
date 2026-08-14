@@ -1255,16 +1255,24 @@ describe("memory_status tool", () => {
 
 describe("lifecycle hooks", () => {
 	let mock;
+	const prevExitSummary = process.env.PI_MEMORY_EXIT_SUMMARY;
 
 	beforeEach(() => {
 		setupTmpDir();
 		ensureDirs();
 		_setQmdAvailable(false);
 		_resetMemorySnapshot();
+		// Exit-summary tests must run with summaries ENABLED regardless of any
+		// ambient PI_MEMORY_EXIT_SUMMARY in the calling shell.
+		delete process.env.PI_MEMORY_EXIT_SUMMARY;
 		mock = registerPlugin();
 	});
 
-	afterEach(cleanupTmpDir);
+	afterEach(() => {
+		if (prevExitSummary === undefined) delete process.env.PI_MEMORY_EXIT_SUMMARY;
+		else process.env.PI_MEMORY_EXIT_SUMMARY = prevExitSummary;
+		cleanupTmpDir();
+	});
 
 	it("registers all adapted lifecycle listeners", () => {
 		assert.ok(mock.hooks["agent/session-start"]);
@@ -1447,6 +1455,8 @@ describe("exit summary configurability", () => {
 	beforeEach(() => {
 		savedEnabled = process.env.PI_MEMORY_EXIT_SUMMARY;
 		savedModel = process.env.PI_MEMORY_EXIT_SUMMARY_MODEL;
+		// Run with summaries enabled regardless of ambient shell env.
+		delete process.env.PI_MEMORY_EXIT_SUMMARY;
 	});
 	afterEach(() => {
 		if (savedEnabled === undefined) delete process.env.PI_MEMORY_EXIT_SUMMARY;
