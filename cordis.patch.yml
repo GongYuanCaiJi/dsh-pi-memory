@@ -1,0 +1,14 @@
+# dsh-pi-memory bundle layer.
+#
+# When this package is listed in a profile's dsh.profile.bundles, this patch
+# is applied over the profile composition: it INSERTS one plugin row.
+# Users override the row's whole `config` in their own cordis.patch.yml
+# (later layers win; a patch REPLACES the entire config, it does not merge).
+#
+# dsh-pi-memory has no row config of its own (the upstream extension is
+# configured exclusively through PI_MEMORY_* environment variables, and this
+# port keeps that contract) — the row config stays empty.
+- insert:
+    - id: dsh-pi-memory
+      name: 'dsh-pi-memory'
+      config: {}

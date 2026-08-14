@@ -1,0 +1,61 @@
+{
+	"name": "dsh-pi-memory",
+	"version": "0.1.0",
+	"description": "跨会话持久记忆（移植自 pi-memory）",
+	"main": "index.js",
+	"type": "module",
+	"keywords": [
+		"dsh",
+		"dsh-plugin",
+		"deepseek-harness",
+		"memory",
+		"search",
+		"qmd",
+		"scratchpad",
+		"daily-log"
+	],
+	"dsh": {
+		"bundle": {
+			"patch": "./cordis.patch.yml"
+		}
+	},
+	"author": "jayzeng",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GongYuanCaiJi/dsh-pi-memory.git"
+	},
+	"bugs": {
+		"url": "https://github.com/GongYuanCaiJi/dsh-pi-memory/issues"
+	},
+	"homepage": "https://github.com/GongYuanCaiJi/dsh-pi-memory#readme",
+	"files": [
+		"index.js",
+		"scripts",
+		"README.md",
+		"CHANGELOG.md",
+		"LICENSE",
+		"THIRD_PARTY_NOTICES.md",
+		"cordis.patch.yml"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"postinstall": "node scripts/postinstall.cjs",
+		"build": "node --check index.js",
+		"lint": "biome check .",
+		"test": "node --test test/",
+		"test:e2e": "node test/e2e.mjs",
+		"test:eval": "node test/eval-recall.mjs"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^2.4.0"
+	},
+	"dependencies": {
+		"@deepseek-ai/schemastery": "3.18.1"
+	},
+	"engines": {
+		"node": ">=22.19.0"
+	}
+}

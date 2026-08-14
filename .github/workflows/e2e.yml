@@ -1,0 +1,33 @@
+name: E2E
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    env:
+      DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      PI_E2E_PROVIDER: deepseek-official
+      PI_E2E_MODEL: deepseek-v4-flash
+    steps:
+      - name: Require API key
+        shell: bash
+        run: test -n "$DEEPSEEK_API_KEY"
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Install dsh CLI (next tag — 0.1.0-rc.x line)
+        run: npm install -g @deepseek-ai/dsh@next
+      - name: Run e2e tests
+        run: npm run test:e2e
