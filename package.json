@@ -42,10 +42,10 @@
 		"access": "public"
 	},
 	"scripts": {
-		"postinstall": "node scripts/postinstall.cjs",
+		"//postinstall": "upstream scripts/postinstall.cjs is kept byte-identical in files/ (see THIRD_PARTY_NOTICES) but NOT wired as postinstall: pnpm 11 refuses tarball installs with build scripts (ERR_PNPM_IGNORED_BUILDS), and the script is a dev-checkout-only git-hooks no-op (no .githooks in this repo) — it would do nothing even if it ran. See porting ticket #18.",
 		"build": "node --check index.js",
 		"lint": "biome check .",
-		"test": "node --test",
+		"test": "node --test test/unit.test.js test/qmd-cache.test.js",
 		"test:e2e": "node test/e2e.mjs",
 		"test:eval": "node test/eval-recall.mjs"
 	},
