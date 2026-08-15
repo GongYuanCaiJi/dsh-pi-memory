@@ -16,7 +16,7 @@
 
 **dsh-pi-memory** 是 [pi-memory](https://github.com/jayzeng/pi-memory)（Pi 生态最流行的记忆插件）的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）移植版。你的 coding agent 每次开新会话都会忘光一切 —— 这个插件给它一份记忆：长期事实与决策、按天追加的工作日志、待办清单，全部是你可以直接读、改、提交的纯 Markdown 文件。装上可选的 [qmd](https://github.com/tobi/qmd) 之后，还能跨所有记忆做关键词、语义与混合**搜索**。
 
-> 移植说明：代码与逻辑 100% 来自上游 [pi-memory](https://www.npmjs.com/package/pi-memory)（[jayzeng/pi-memory](https://github.com/jayzeng/pi-memory)，MIT）。本移植只改动了 dsh 插件入口与生命周期接线，每一处改动都有原因，逐条记录在移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回報里。**请也给上游 [pi-memory](https://github.com/jayzeng/pi-memory) 一个 star。**
+> 移植说明：代码与逻辑 100% 来自上游 [pi-memory](https://www.npmjs.com/package/pi-memory)（[jayzeng/pi-memory](https://github.com/jayzeng/pi-memory)，MIT）。本移植只改动了 dsh 插件入口与生命周期接线，每一处改动都有原因，逐条记录在移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回报里。**请也给上游 [pi-memory](https://github.com/jayzeng/pi-memory) 一个 star。**
 
 ## 功能
 
@@ -73,7 +73,7 @@ cd dsh-pi-memory && npm install
 # 2. 装进一个 dsh profile（headless 一次性任务还需要 @deepseek-ai/dsh-headless@next）
 P=verify-$(basename $PWD)-$$
 dsh plugin --profile "$P" add @deepseek-ai/dsh-headless@next
-dsh plugin --profile "$P" add ./dsh-pi-memory
+dsh plugin --profile "$P" add .
 
 # 3. 用起来
 dsh --profile "$P" "记住：我偏好深色模式"
@@ -269,7 +269,7 @@ git push --follow-tags
 
 ## 更新日志
 
-上游 [CHANGELOG.md](./CHANGELOG.md) 逐字保留（SHA-256 钉在 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) 中，可自验）。dsh 移植本身的改动清单见移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回報。
+上游 [CHANGELOG.md](./CHANGELOG.md) 逐字保留（SHA-256 钉在 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) 中，可自验）。dsh 移植本身的改动清单见移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回报。
 
 ## 第三方声明
 
@@ -338,7 +338,7 @@ cd dsh-pi-memory && npm install
 # 2. Add it to a dsh profile (headless one-shot runs also need @deepseek-ai/dsh-headless@next)
 P=verify-$(basename $PWD)-$$
 dsh plugin --profile "$P" add @deepseek-ai/dsh-headless@next
-dsh plugin --profile "$P" add ./dsh-pi-memory
+dsh plugin --profile "$P" add .
 
 # 3. Use it
 dsh --profile "$P" "Remember: I prefer dark mode"

@@ -909,7 +909,6 @@ export function getQmdSearchTimeoutMs(env = process.env) {
 	return Number.isInteger(configured) && configured > 0 ? configured : DEFAULT_QMD_SEARCH_TIMEOUT_MS;
 }
 let updateTimer = null;
-let exitSummaryReason = null;
 
 /** Override execFile implementation (for testing). */
 export function _setExecFileForTest(fn) {
@@ -1417,9 +1416,9 @@ export function buildInjectedSectionText(searchResults = "") {
  * snapshot. Maps Pi's `session_start` hook to dsh's `agent/session-start`.
  */
 export async function handleSessionStart() {
-	exitSummaryReason = null;
-	// Pi's ctrl+d detection (ctx.ui.onTerminalInput) has no dsh equivalent;
-	// the exit-summary reason therefore stays "session-end" (see ticket #18).
+	// Pi's ctrl+d / /quit detection (ctx.ui.onTerminalInput, input hook) has no
+	// dsh equivalent, so the exit-summary reason is always "session-end"
+	// (see ticket #18); the upstream reason machinery is not ported.
 
 	qmdAvailable = await detectQmd();
 	if (!qmdAvailable) {
@@ -1513,12 +1512,10 @@ export async function handleSessionShutdown(ctx, agent) {
 	}
 
 	if (!isExitSummaryEnabled()) {
-		exitSummaryReason = null;
 		return;
 	}
 
-	const reason = exitSummaryReason ?? "session-end";
-	exitSummaryReason = null;
+	const reason = "session-end";
 
 	let summaryTimer;
 	try {
@@ -2332,7 +2329,10 @@ export function apply(ctx, _config = {}) {
 	});
 
 	// --- per-turn selective injection: prefetch qmd search at each turn's
-	// first step (matches Pi's per-turn before_agent_start cadence) ---
+	// first step (matches Pi's per-turn before_agent_start cadence). The
+	// search is awaited before next() — like upstream's before_agent_start —
+	// so the current turn's section provider reads fresh results (bounded by
+	// searchRelevantMemories' internal 3s timeout; it never rejects). ---
 	ctx.on(
 		"agent/pre-step",
 		async (payload, next) => {
@@ -2344,11 +2344,7 @@ export function apply(ctx, _config = {}) {
 			) {
 				const text = latestUserText(payload?.messages);
 				if (text) {
-					searchRelevantMemories(text)
-						.then((result) => {
-							perTurnSearchCache = result;
-						})
-						.catch(() => {});
+					perTurnSearchCache = await searchRelevantMemories(text);
 				}
 			}
 			return next();

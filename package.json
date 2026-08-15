@@ -43,6 +43,9 @@
 	},
 	"scripts": {
 		"//postinstall": "upstream scripts/postinstall.cjs is kept byte-identical in files/ (see THIRD_PARTY_NOTICES) but NOT wired as postinstall: pnpm 11 refuses tarball installs with build scripts (ERR_PNPM_IGNORED_BUILDS), and the script is a dev-checkout-only git-hooks no-op (no .githooks in this repo) — it would do nothing even if it ran. See porting ticket #18.",
+		"//build": "upstream `tsc -p tsconfig.json --noEmit` typechecked TypeScript; this port ships plain ESM (the dsh loader contract) so there is nothing to typecheck — node --check is the syntax guard. See porting ticket #18.",
+		"//prepare": "playbook requires prepare so github: installs build; this port has no build step (plain JS, no transpile) and README offers local-path/tarball installs, so prepare would be an empty ceremony. See porting ticket #18.",
+		"//test": "upstream `bun test test/unit.test.ts` became node --test (Node ships everywhere; a stranger's clone needs no Bun). `npm run build &&` prefix omitted: the build guard for a plain-JS package is node --check, already run in CI before npm test. See porting ticket #18.",
 		"build": "node --check index.js",
 		"lint": "biome check .",
 		"test": "node --test test/unit.test.js test/qmd-cache.test.js",
