@@ -1,6 +1,6 @@
 <div align="center">
 
-[![中文](#中文) | [English](#english)
+[中文](#中文) | [English](#english)
 
 # dsh-pi-memory
 
@@ -16,7 +16,9 @@
 
 **dsh-pi-memory** 是 [pi-memory](https://github.com/jayzeng/pi-memory)（Pi 生态最流行的记忆插件）的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）移植版。你的 coding agent 每次开新会话都会忘光一切 —— 这个插件给它一份记忆：长期事实与决策、按天追加的工作日志、待办清单，全部是你可以直接读、改、提交的纯 Markdown 文件。装上可选的 [qmd](https://github.com/tobi/qmd) 之后，还能跨所有记忆做关键词、语义与混合**搜索**。
 
-> 移植说明：代码与逻辑 100% 来自上游 [pi-memory](https://www.npmjs.com/package/pi-memory)（[jayzeng/pi-memory](https://github.com/jayzeng/pi-memory)，MIT）。本移植只改动了 dsh 插件入口与生命周期接线，每一处改动都有原因，逐条记录在移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回报里。**请也给上游 [pi-memory](https://github.com/jayzeng/pi-memory) 一个 star。**
+> 移植说明：代码与逻辑 100% 来自上游 [pi-memory](https://www.npmjs.com/package/pi-memory)（[jayzeng/pi-memory](https://github.com/jayzeng/pi-memory)，MIT）。本移植只改动了 dsh 插件入口与生命周期接线，每一处改动都有原因，逐条记录在移植票 #18 的交付回报里。**请也给上游 [pi-memory](https://github.com/jayzeng/pi-memory) 一个 star。**
+
+> 已知限制：插件注入给 agent 的提示词与记忆上下文模板是上游英文原文，逐字保留未做翻译；记忆文件内容用什么语言写由你决定。
 
 ## 功能
 
@@ -198,7 +200,7 @@ qmd embed
 | `PI_MEMORY_EXIT_SUMMARY_MODEL` | `provider/model-id` | 未设置（会话模型） | 写退出总结用的模型，比如更便宜的。无法解析则回退会话模型 |
 | `PI_MEMORY_EXIT_SUMMARY_TIMEOUT_MS` | 正整数（毫秒） | `10000` | 退出总结自限超时；超时则不落盘 |
 
-> 移植注：`session_shutdown` 在 dsh 上映射为 `agent/disposed` —— 该事件只在 dsh 主动销毁 agent 且服务仍存活时触发；headless 一次性任务结束时服务先于插件析构，退出总结会安静跳过（不崩溃、不落盘）。这是 dsh 生命周期与 Pi 的差异，详见移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18)。
+> 移植注：`session_shutdown` 在 dsh 上映射为 `agent/disposed` —— 该事件只在 dsh 主动销毁 agent 且服务仍存活时触发；headless 一次性任务结束时服务先于插件析构，退出总结会安静跳过（不崩溃、不落盘）。这是 dsh 生命周期与 Pi 的差异，详见移植票 #18。
 
 ## 故障排查
 
@@ -269,7 +271,7 @@ git push --follow-tags
 
 ## 更新日志
 
-上游 [CHANGELOG.md](./CHANGELOG.md) 逐字保留（SHA-256 钉在 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) 中，可自验）。dsh 移植本身的改动清单见移植票 [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18) 的交付回报。
+上游 [CHANGELOG.md](./CHANGELOG.md) 逐字保留（SHA-256 钉在 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) 中，可自验）。dsh 移植本身的改动清单见移植票 #18 的交付回报。
 
 ## 第三方声明
 
@@ -281,7 +283,9 @@ git push --follow-tags
 
 **dsh-pi-memory** is a [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) port of [pi-memory](https://github.com/jayzeng/pi-memory), the most popular memory extension in the Pi ecosystem. Your coding agent forgets everything between sessions — this plugin gives it a memory: durable facts and decisions, a running daily log, and a scratchpad of things to come back to — all as plain Markdown files you can read, edit, and commit. With optional [qmd](https://github.com/tobi/qmd) it also gets keyword, semantic, and hybrid **search** across everything it has ever remembered.
 
-> Porting notes: the code and logic are 100% from upstream [pi-memory](https://www.npmjs.com/package/pi-memory) ([jayzeng/pi-memory](https://github.com/jayzeng/pi-memory), MIT). This port only changes the dsh plugin entry and lifecycle wiring; every change is listed with a reason in the delivery report of porting ticket [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18). **Please also star upstream [pi-memory](https://github.com/jayzeng/pi-memory).**
+> Porting notes: the code and logic are 100% from upstream [pi-memory](https://www.npmjs.com/package/pi-memory) ([jayzeng/pi-memory](https://github.com/jayzeng/pi-memory), MIT). This port only changes the dsh plugin entry and lifecycle wiring; every change is listed with a reason in the delivery report of porting ticket #18. **Please also star upstream [pi-memory](https://github.com/jayzeng/pi-memory).**
+
+> Known limitation: the prompts and memory-context templates injected into the agent are upstream English, preserved verbatim (not translated); the language of your memory content is up to you.
 
 ## Features
 
@@ -463,7 +467,7 @@ When the context window compacts, the plugin automatically captures a handoff en
 | `PI_MEMORY_EXIT_SUMMARY_MODEL` | `provider/model-id` | unset (session model) | Model used to write the exit summary, e.g. a cheaper/faster one. Unresolvable specs fall back to the session model. |
 | `PI_MEMORY_EXIT_SUMMARY_TIMEOUT_MS` | positive integer (milliseconds) | `10000` | Self-imposed timeout for exit-summary generation on session end. On expiry nothing is persisted. |
 
-> Porting note: `session_shutdown` maps to dsh's `agent/disposed` — that event fires only when dsh disposes an agent while services are still live; in headless one-shot runs the services are torn down before plugin disposers run, so the exit summary is silently skipped (no crash, nothing persisted). This is a dsh-vs-Pi lifecycle difference, detailed in porting ticket [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18).
+> Porting note: `session_shutdown` maps to dsh's `agent/disposed` — that event fires only when dsh disposes an agent while services are still live; in headless one-shot runs the services are torn down before plugin disposers run, so the exit summary is silently skipped (no crash, nothing persisted). This is a dsh-vs-Pi lifecycle difference, detailed in porting ticket #18.
 
 ## Troubleshooting
 
@@ -535,7 +539,7 @@ git push --follow-tags
 
 ## Changelog
 
-Upstream [CHANGELOG.md](./CHANGELOG.md) is preserved verbatim (its SHA-256 is pinned in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) so the claim is self-verifiable). The dsh port's own change list lives in the delivery report of porting ticket [#18](https://github.com/GongYuanCaiJi/deepseek-harness/issues/18).
+Upstream [CHANGELOG.md](./CHANGELOG.md) is preserved verbatim (its SHA-256 is pinned in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) so the claim is self-verifiable). The dsh port's own change list lives in the delivery report of porting ticket #18.
 
 ## Third-party notices
 

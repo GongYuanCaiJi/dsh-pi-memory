@@ -2,9 +2,9 @@
 
 `dsh-pi-memory` is a port of **[pi-memory](https://github.com/jayzeng/pi-memory)** —
 a Pi coding agent extension — into a DeepSeek Harness (`dsh`) plugin. The port
-follows the [porting playbook](https://github.com/GongYuanCaiJi/deepseek-harness/blob/main/docs/port-playbook.md):
-upstream code is copied 100% verbatim wherever it can run unchanged, and every
-adaptation is listed in the delivery report of the porting ticket.
+follows the porting playbook of the dsh plugin pipeline: upstream code is
+copied 100% verbatim wherever it can run unchanged, and every adaptation is
+listed in the delivery report of the porting ticket.
 
 ## Upstream package (pinned)
 
@@ -31,13 +31,25 @@ adaptation is listed in the delivery report of the porting ticket.
 | `scripts/postinstall.cjs` | `5ab264bc77c305b8d66d6c41fd451ede1f69ffc3ebcaf3241083a44343f7e71d` | `package/scripts/postinstall.cjs` |
 
 ```bash
-# Verify verbatim files against the pinned upstream tarball:
-cd "$(mktemp -d)" && curl -sL -o pi-memory.tgz \
-  https://registry.npmjs.org/pi-memory/-/pi-memory-0.4.2.tgz && tar xzf pi-memory.tgz
-cmp package/CHANGELOG.md              <(curl -sL https://raw.githubusercontent.com/jayzeng/pi-memory/39e6b998a2279c8fad4a2c6c64e26828c1d6023e/CHANGELOG.md) \
+# Verify the local files in THIS repo against the pinned upstream tarball.
+# Run these commands from the root of this repo:
+
+tmp=$(mktemp -d)
+curl -sL -o "$tmp/pi-memory.tgz" https://registry.npmjs.org/pi-memory/-/pi-memory-0.4.2.tgz
+tar xzf "$tmp/pi-memory.tgz" -C "$tmp"
+
+cmp CHANGELOG.md "$tmp/package/CHANGELOG.md" \
   && echo "CHANGELOG.md matches upstream" || echo "CHANGELOG.md differs"
-cmp package/scripts/postinstall.cjs    <(curl -sL https://raw.githubusercontent.com/jayzeng/pi-memory/39e6b998a2279c8fad4a2c6c64e26828c1d6023e/scripts/postinstall.cjs) \
+cmp scripts/postinstall.cjs "$tmp/package/scripts/postinstall.cjs" \
   && echo "scripts/postinstall.cjs matches upstream" || echo "scripts/postinstall.cjs differs"
+
+rm -rf "$tmp"
+
+# Or check the SHA-256 table above directly (no download needed):
+shasum -a 256 -c <<'EOF'
+84f5d0e62063e48b6b2d24c51fe1b465badd96ee2999ed2928ea36b2efd86c24  CHANGELOG.md
+5ab264bc77c305b8d66d6c41fd451ede1f69ffc3ebcaf3241083a44343f7e71d  scripts/postinstall.cjs
+EOF
 ```
 
 ## Adapted files
